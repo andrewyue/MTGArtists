@@ -16,4 +16,6 @@ There exist additional basic land reprints (e.g. <a href="http://magiccards.info
 
 The R script outputs two plots.  The top plot is a stacked bar graph that allows for comparisons between the total pieces of art each artist created, with additional absolute information in the color/type breakdown.  In the bottom plot, the color/type breakdown for each artist is shown relative to their total volume of work.  This allows the viewer to quickly determine if an artist is, for example, more frequently chosen to create art for land cards.
 
+The plot generated can be seen below.  The font used for all labels is MPlantin, which can be found at any number of font websites.
+
 <img src="http://i.imgur.com/OFg8OP5.jpg">
