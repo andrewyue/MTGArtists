@@ -11,7 +11,7 @@ allcards <- read.delim("~/MTGArtists/allcards.txt", header=TRUE)
 basiclands = c('Plains', 'Island', 'Swamp', 'Forest', 'Mountain')
 repeatedbasicset = c('Limited Edition Beta', 'Unlimited Edition', 'Revised Edition', 'Fourth Edition', 'Ninth Edition')
 # set up order of card colors/types
-colororder = c('White', 'Blue', 'Black', 'Green', 'Red', 'Multi', 'Colorless', 'Land')
+colororder = c('White', 'Blue', 'Black', 'Red', 'Green', 'Multi', 'Colorless', 'Land')
 # and assign plot colors to each
 cols = c('White' = 'ivory', 'Blue' = 'lightskyblue', 'Black' = 'gray22', 'Green' = 'springgreen3', 'Red' = 'indianred1', 'Colorless' = 'gray75', 'Multi' = 'gold', 'Land' = 'tan3')
 # generate a TRUE/FALSE column containing any repeated combinations of card name + artist
@@ -38,7 +38,7 @@ top10uniques$artist = factor(top10uniques$artist, levels = top10artists)
 # and set the order for the colors
 top10uniques$color = factor(top10uniques$color, levels = colororder)
 # trickery to allow for a facet_wrap with relative percentages for individual artists instead of the top ten combined
-df = aggregate(color~artist,top10uniques, function(x)c(White=100*sum(x=="White")/length(x), Blue=100*sum(x=="Blue")/length(x), Black=100*sum(x=="Black")/length(x), Green=100*sum(x=="Green")/length(x), Red=100*sum(x=="Red")/length(x), Multi=100*sum(x=="Multi")/length(x), Colorless=100*sum(x=="Colorless")/length(x), Land=100*sum(x=="Land")/length(x)))
+df = aggregate(color~artist,top10uniques, function(x)c(White=100*sum(x=="White")/length(x), Blue=100*sum(x=="Blue")/length(x), Black=100*sum(x=="Black")/length(x), Red=100*sum(x=="Red")/length(x), Green=100*sum(x=="Green")/length(x), Multi=100*sum(x=="Multi")/length(x), Colorless=100*sum(x=="Colorless")/length(x), Land=100*sum(x=="Land")/length(x)))
 df = data.frame(artist=df$artist, df$color)
 gg = melt(df,id=1, variable.name="Color",value.name="Rel.Pct.")
 # slightly modified version of theme found here: http://jonlefcheck.net/2013/03/11/black-theme-for-ggplot2-2/
@@ -89,7 +89,7 @@ theme_black=function(base_size=12,base_family="") {
     )
 }
 # grotesque ggplots for the top 10 artist relative percentages by card color/type
-top10percentages = ggplot(gg) + geom_bar(aes(x=Color, y=Rel.Pct., fill=Color),position="dodge",stat="identity")+facet_wrap(~artist,nrow=1, ncol=10) + scale_fill_manual(values = cols, labels=c('White   ', 'Blue   ', 'Black   ', 'Green   ', 'Red   ', 'Multi   ', 'Colorless   ', 'Land'), name='Card Color / Type:  ')+ scale_x_discrete(breaks=NULL) + xlab(NULL) + ylab('Distribution by Card Color / Type (%)') + theme_black() + theme(plot.margin=unit(c(0,0.5,0,2),"lines"),strip.text.x = element_blank(),strip.background=element_blank())+coord_cartesian(ylim=c(0,75))+theme(axis.text.y = element_text(size=32, family="Times New Roman"),axis.title.y = element_text(size=32, family="MPlantin",vjust=2.5)) + theme(legend.text=element_text(size=24,color="white",family="MPlantin"), legend.title=element_text(size=24,face="bold",hjust=0,color="white",family="MPlantin"))
+top10percentages = ggplot(gg) + geom_bar(aes(x=Color, y=Rel.Pct., fill=Color),position="dodge",stat="identity")+facet_wrap(~artist,nrow=1, ncol=10) + scale_fill_manual(values = cols, labels=c('White   ', 'Blue   ', 'Black   ', 'Red   ', 'Green   ', 'Multi   ', 'Colorless   ', 'Land'), name='Card Color / Type:  ')+ scale_x_discrete(breaks=NULL) + xlab(NULL) + ylab("Portion of Artist's Total Artwork (%)") + theme_black() + theme(plot.margin=unit(c(0,0.5,0,2),"lines"),strip.text.x = element_blank(),strip.background=element_blank())+coord_cartesian(ylim=c(0,75))+theme(axis.text.y = element_text(size=32, family="Times New Roman"),axis.title.y = element_text(size=32, family="MPlantin",vjust=2.5)) + theme(legend.text=element_text(size=24,color="white",family="MPlantin"), legend.title=element_text(size=24,face="bold",hjust=0,color="white",family="MPlantin"))
 # and total pieces of artwork
 top10totals = ggplot(top10uniques, aes(artist, fill=color)) + geom_bar(width=900) + xlab(NULL) + ylab('Total Artwork') + theme_black() + scale_fill_manual(values = cols) + facet_wrap(~artist, ncol=10, nrow=1) + theme(strip.background=element_blank()) + scale_x_discrete(breaks=NULL) + coord_cartesian(ylim=c(0,405)) + theme(plot.margin=unit(c(0,0.5,0,2),"lines")) + theme(strip.text.x = element_text(size=28,family="MPlantin", vjust=1)) +theme(axis.text.y = element_text(size=32, family="Times New Roman"),axis.title.y = element_text(size=32, family="MPlantin",vjust=2.5))+theme(legend.position='none')+theme(plot.title = element_text(size=54, family="MPlantin", vjust=-1))+ggtitle('Most Prolific Magic the Gathering Artists\n')
 # combined into a grid
