@@ -18,4 +18,4 @@ The R script outputs two plots.  The top plot is a stacked bar graph that allows
 
 The plot generated can be seen below.  The font used for all labels is MPlantin, which can be found at any number of font websites.
 
-<img src="http://i.imgur.com/fnOY1ZG.jpg">
+<img src="http://i.imgur.com/WSoQVs0.jpg">
