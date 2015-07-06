@@ -13,7 +13,7 @@ repeatedbasicset = c('Limited Edition Beta', 'Unlimited Edition', 'Revised Editi
 # set up order of card colors/types
 colororder = c('White', 'Blue', 'Black', 'Green', 'Red', 'Multi', 'Colorless', 'Land')
 # and assign plot colors to each
-cols = c('White' = 'ivory', 'Blue' = 'lightskyblue', 'Black' = 'gray58', 'Green' = 'springgreen3', 'Red' = 'indianred1', 'Colorless' = 'tan3', 'Multi' = 'gold', 'Land' = 'slateblue4')
+cols = c('White' = 'ivory', 'Blue' = 'lightskyblue', 'Black' = 'gray22', 'Green' = 'springgreen3', 'Red' = 'indianred1', 'Colorless' = 'gray75', 'Multi' = 'gold', 'Land' = 'tan3')
 # generate a TRUE/FALSE column containing any repeated combinations of card name + artist
 allcards$repeatname = duplicated(allcards[1:2])
 # generate a TRUE/FALSE column containing all basic lands
@@ -33,7 +33,9 @@ topartists = stack(summary(uniquecards$artist))
 top10artists = as.character(topartists$ind[1:10])
 # and make a new data frame containing cards attributable to the top ten artists
 top10uniques = subset(uniquecards, artist %in% top10artists)
+# set the order for the artist facet_wrap from most pieces to fewest
 top10uniques$artist = factor(top10uniques$artist, levels = top10artists)
+# and set the order for the colors
 top10uniques$color = factor(top10uniques$color, levels = colororder)
 # trickery to allow for a facet_wrap with relative percentages for individual artists instead of the top ten combined
 df = aggregate(color~artist,top10uniques, function(x)c(White=100*sum(x=="White")/length(x), Blue=100*sum(x=="Blue")/length(x), Black=100*sum(x=="Black")/length(x), Green=100*sum(x=="Green")/length(x), Red=100*sum(x=="Red")/length(x), Multi=100*sum(x=="Multi")/length(x), Colorless=100*sum(x=="Colorless")/length(x), Land=100*sum(x=="Land")/length(x)))
@@ -72,7 +74,7 @@ theme_black=function(base_size=12,base_family="") {
       # Specify panel options
       panel.background=element_rect(fill="black",color = NA), 
       panel.border=element_rect(fill=NA,color="white"), 
-      panel.grid.major=element_line(color='gray50',size=0.2), 
+      panel.grid.major=element_line(color='white',size=0.2), 
       panel.grid.minor=element_blank(), 
       panel.margin=unit(0.5,"lines"),  
       # Specify facetting options
@@ -87,9 +89,9 @@ theme_black=function(base_size=12,base_family="") {
     )
 }
 # grotesque ggplots for the top 10 artist relative percentages by card color/type
-top10percentages = ggplot(gg) + geom_bar(aes(x=Color, y=Rel.Pct., fill=Color),position="dodge",stat="identity")+facet_wrap(~artist,nrow=1, ncol=10) + scale_fill_manual(values = cols)+ scale_x_discrete(breaks=NULL) + xlab(NULL) + ylab('Distribution by Card Color (%)') + theme_black() + theme(plot.margin=unit(c(0,0.5,0,1.5),"lines"),strip.text.x = element_blank(),strip.background=element_blank())+coord_cartesian(ylim=c(0,75))+theme(axis.text.y = element_text(size=32, family="Myriad Web Pro"),axis.title.y = element_text(size=32, family="MPlantin",vjust=3)) + theme(legend.text=element_text(size=24,color="white",family="MPlantin"), legend.title=element_text(size=24,face="bold",hjust=0,color="white",family="MPlantin"))
+top10percentages = ggplot(gg) + geom_bar(aes(x=Color, y=Rel.Pct., fill=Color),position="dodge",stat="identity")+facet_wrap(~artist,nrow=1, ncol=10) + scale_fill_manual(values = cols, labels=c('White   ', 'Blue   ', 'Black   ', 'Green   ', 'Red   ', 'Multi   ', 'Colorless   ', 'Land'), name='Card Color / Type:  ')+ scale_x_discrete(breaks=NULL) + xlab(NULL) + ylab('Distribution by Card Color / Type (%)') + theme_black() + theme(plot.margin=unit(c(0,0.5,0,2),"lines"),strip.text.x = element_blank(),strip.background=element_blank())+coord_cartesian(ylim=c(0,75))+theme(axis.text.y = element_text(size=32, family="Times New Roman"),axis.title.y = element_text(size=32, family="MPlantin",vjust=2.5)) + theme(legend.text=element_text(size=24,color="white",family="MPlantin"), legend.title=element_text(size=24,face="bold",hjust=0,color="white",family="MPlantin"))
 # and total pieces of artwork
-top10totals = ggplot(top10uniques, aes(artist, fill=color)) + geom_bar(width=900) + xlab(NULL) + ylab('Total Pieces') + theme_black() + scale_fill_manual(values = cols) + facet_wrap(~artist, ncol=10, nrow=1) + theme(strip.background=element_blank()) + scale_x_discrete(breaks=NULL) + coord_cartesian(ylim=c(0,405)) + theme(plot.margin=unit(c(0,0.5,0,1.5),"lines")) + theme(strip.text.x = element_text(size=28,family="MPlantin")) +theme(axis.text.y = element_text(size=32, family="Myriad Web Pro"),axis.title.y = element_text(size=32, family="MPlantin",vjust=3))+theme(legend.position='none')+theme(plot.title = element_text(size=54, family="MPlantin"))+ggtitle('Most Prolific Magic the Gathering Artists\n')
+top10totals = ggplot(top10uniques, aes(artist, fill=color)) + geom_bar(width=900) + xlab(NULL) + ylab('Total Artwork') + theme_black() + scale_fill_manual(values = cols) + facet_wrap(~artist, ncol=10, nrow=1) + theme(strip.background=element_blank()) + scale_x_discrete(breaks=NULL) + coord_cartesian(ylim=c(0,405)) + theme(plot.margin=unit(c(0,0.5,0,2),"lines")) + theme(strip.text.x = element_text(size=28,family="MPlantin", vjust=1)) +theme(axis.text.y = element_text(size=32, family="Times New Roman"),axis.title.y = element_text(size=32, family="MPlantin",vjust=2.5))+theme(legend.position='none')+theme(plot.title = element_text(size=54, family="MPlantin", vjust=-1))+ggtitle('Most Prolific Magic the Gathering Artists\n')
 # combined into a grid
 totals <- ggplotGrob(top10totals)
 percentages <- ggplotGrob(top10percentages)
